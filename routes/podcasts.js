@@ -1,4 +1,4 @@
-const PodcastModel = require("../models/Podcasts");
+const PodcastModel = require("./models/Podcasts");
 const express = require("express");
 const UserModel = require("../models/Users");
 const podcastsRouter = express.Router();
