@@ -1,4 +1,4 @@
-const PodcastModel = require("./models/Podcasts");
+const PodcastModel = require("../models/Podcasts");
 const express = require("express");
 const UserModel = require("../models/Users");
 const podcastsRouter = express.Router();
@@ -79,23 +79,27 @@ podcastsRouter.delete("/:podcastID/:userID", async (req, res) => {
   }
 });
 
-
 // delete podcast from server
-podcastsRouter.delete("/delete-podcasts/:podcastID/:userID", async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.params.userID);
-    const podcast = await PodcastModel.findByIdAndDelete(req.params.podcastID);
+podcastsRouter.delete(
+  "/delete-podcasts/:podcastID/:userID",
+  async (req, res) => {
+    try {
+      const user = await UserModel.findById(req.params.userID);
+      const podcast = await PodcastModel.findByIdAndDelete(
+        req.params.podcastID
+      );
 
-    user.savedPodcasts = user.savedPodcasts.filter(
-      (savedPodcastID) => savedPodcastID.toString() !== podcast._id.toString()
-    );
+      user.savedPodcasts = user.savedPodcasts.filter(
+        (savedPodcastID) => savedPodcastID.toString() !== podcast._id.toString()
+      );
 
-    await user.save();
-    res.json(podcast);
-  } catch (error) {
-    res.json(error);
+      await user.save();
+      res.json(podcast);
+    } catch (error) {
+      res.json(error);
+    }
   }
-});
+);
 
 // Update
 // Update podcast details
@@ -113,7 +117,10 @@ podcastsRouter.put("/:podcastID", async (req, res) => {
       return res.status(404).json({ message: "Podcast not found" });
     }
 
-    res.json({ message: "Podcast updated successfully", podcast: updatedPodcast });
+    res.json({
+      message: "Podcast updated successfully",
+      podcast: updatedPodcast,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
